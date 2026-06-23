@@ -1,0 +1,658 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&family=Product+Sans:wght@400;700&display=swap');
+
+:root {
+  --gmc-red: #cc0000;
+  --gmc-red-glow: rgba(204, 0, 0, 0.4);
+  --dark-bg: #050505;
+  --surface: #111111;
+  --surface-border: #222222;
+  --text-primary: #ffffff;
+  --text-secondary: #888888;
+  --chrome: linear-gradient(180deg, #e0e0e0, #888888);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Product Sans', 'Google Sans', 'Noto Sans Arabic', sans-serif;
+  background-color: var(--dark-bg);
+  color: var(--text-primary);
+  height: 100vh;
+  overflow: hidden;
+  direction: rtl;
+  background-image: radial-gradient(#151515 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: radial-gradient(circle at center, rgba(30,30,30,0.5) 0%, var(--dark-bg) 100%);
+}
+
+.sidebar {
+  width: 320px;
+  background: var(--surface);
+  border-left: 1px solid var(--surface-border);
+  display: flex;
+  flex-direction: column;
+  padding: 30px 20px;
+  box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+  position: relative;
+  z-index: 10;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.gmc-logo {
+  font-family: 'Outfit', sans-serif;
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--gmc-red);
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 0px #fff, -1px -1px 0px #fff, 1px -1px 0px #fff, -1px 1px 0px #fff;
+  border: 4px solid #ccc;
+  padding: 5px 20px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #444, #111);
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 25px;
+  border-radius: 10px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.25rem;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.nav-item:hover {
+  background: rgba(255,255,255,0.02);
+  color: var(--text-primary);
+  border-color: var(--surface-border);
+}
+
+.nav-item.active {
+  background: linear-gradient(90deg, rgba(204,0,0,0.1), transparent);
+  color: var(--text-primary);
+  border-right: 5px solid var(--gmc-red);
+  box-shadow: inset -10px 0 20px rgba(204,0,0,0.05);
+}
+
+.nav-icon {
+  font-size: 1.6rem;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.top-header {
+  height: 100px;
+  background: rgba(17, 17, 17, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--surface-border);
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  justify-content: space-between;
+}
+
+.header-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.stats-row {
+  display: flex;
+  gap: 30px;
+}
+
+.stat-box {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: #000;
+  padding: 12px 25px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  box-shadow: inset 0 0 10px rgba(255,255,255,0.02);
+}
+
+.stat-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--surface), #000);
+  border: 2px solid var(--gmc-red);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--gmc-red);
+  box-shadow: 0 0 10px var(--gmc-red-glow);
+}
+
+.stat-info h4 {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+.stat-info p {
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+}
+
+.page-container {
+  flex: 1;
+  padding: 50px;
+  overflow-y: auto;
+}
+
+.page-title {
+  font-size: 2.2rem;
+  margin-bottom: 30px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.page-title::before {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 40px;
+  background: var(--gmc-red);
+  border-radius: 4px;
+}
+
+.io-form {
+  background: var(--surface);
+  padding: 35px;
+  border-radius: 15px;
+  border: 1px solid var(--surface-border);
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 25px;
+  align-items: end;
+  margin-bottom: 40px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-group label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.form-group input {
+  background: #000;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 18px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-family: 'Outfit', sans-serif;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--gmc-red);
+  box-shadow: 0 0 10px var(--gmc-red-glow);
+}
+
+.btn-primary {
+  background: var(--gmc-red);
+  color: #fff;
+  border: none;
+  padding: 18px 35px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 5px 15px var(--gmc-red-glow);
+  font-family: 'Cairo', sans-serif;
+  height: 62px;
+}
+
+.btn-primary:hover {
+  background: #e60000;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(204, 0, 0, 0.6);
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.summary-item {
+  background: linear-gradient(135deg, var(--surface), #000);
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: inset 0 0 20px rgba(255,255,255,0.02);
+}
+
+.summary-item span {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.summary-item strong {
+  font-size: 2.8rem;
+  font-family: 'Outfit', sans-serif;
+  color: var(--gmc-red);
+  text-shadow: 0 0 15px var(--gmc-red-glow);
+}
+
+.io-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--surface);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--surface-border);
+}
+
+.io-table th, .io-table td {
+  padding: 18px 25px;
+  text-align: right;
+  border-bottom: 1px solid var(--surface-border);
+  font-size: 1.1rem;
+}
+
+.io-table th {
+  background: #151515;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.io-table tr:last-child td {
+  border-bottom: none;
+}
+
+.io-table tr:hover td {
+  background: rgba(255,255,255,0.02);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--dark-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* -------------------------------------
+   Interactive GMC Front (Home Page)
+   ------------------------------------- */
+.home-dashboard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: radial-gradient(circle at center, #1a1a1a 0%, var(--dark-bg) 70%);
+}
+
+.abstract-gmc-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px; /* Reduced gap to frame the logo tightly */
+  cursor: pointer;
+  padding: 50px;
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.abstract-gmc-container:hover {
+  transform: scale(1.05);
+}
+
+.abstract-gmc-logo {
+  font-family: 'Outfit', sans-serif;
+  font-size: 10rem;
+  font-weight: 900;
+  color: rgba(204, 0, 0, 0.15); /* Dim red */
+  letter-spacing: 5px;
+  text-shadow: 0 0 15px rgba(204,0,0,0.1);
+  transition: all 0.6s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.abstract-gmc-container:hover .abstract-gmc-logo {
+  color: #ff1a1a; /* Bright red */
+  text-shadow: 
+    0 0 30px rgba(255, 0, 0, 0.8),
+    0 0 60px rgba(204, 0, 0, 0.6),
+    0 0 100px rgba(204, 0, 0, 0.4);
+}
+
+/* C-Shaped LED DRLs */
+.abstract-headlight {
+  width: 120px;
+  height: 240px;
+  background: transparent;
+  border: 15px solid rgba(255, 255, 255, 0.05); /* Dim white outline */
+  transition: all 0.6s ease;
+  filter: drop-shadow(0 0 5px rgba(255,255,255,0.02));
+}
+
+.abstract-left {
+  border-right: none;
+  border-radius: 40px 0 0 40px;
+}
+
+.abstract-right {
+  border-left: none;
+  border-radius: 0 40px 40px 0;
+}
+
+.abstract-gmc-container:hover .abstract-headlight {
+  border-color: #ffffff; /* Bright white border */
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 40px rgba(255, 255, 255, 0.4));
+}
+
+.welcome-text {
+  margin-top: 50px;
+  text-align: center;
+  animation: fadeIn 2s ease forwards;
+}
+
+.welcome-title {
+  font-size: 3.8rem;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  color: var(--text-primary);
+  letter-spacing: 5px;
+  text-shadow: 0 0 20px rgba(204,0,0,0.5);
+}
+
+.welcome-subtitle {
+  font-size: 1.4rem;
+  color: var(--text-secondary);
+  margin-top: 5px;
+  letter-spacing: 2px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* -------------------------------------
+   Split Layout for Pages
+   ------------------------------------- */
+.split-layout {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+.form-section {
+  background: var(--surface);
+  padding: 30px;
+  border-radius: 15px;
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.table-section {
+  background: var(--surface);
+  border-radius: 15px;
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+
+.io-form-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.custom-select {
+  background: #000;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-family: 'Outfit', 'Cairo', sans-serif;
+  cursor: pointer;
+  outline: none;
+}
+.custom-select:focus {
+  border-color: var(--gmc-red);
+  box-shadow: 0 0 10px var(--gmc-red-glow);
+}
+
+.badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+.badge-in {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.5);
+}
+.badge-out {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+}
+
+/* -------------------------------------
+   Modal Styles for The Log
+   ------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: var(--dark-bg);
+  padding: 30px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  left: 20px; /* Arabic RTL */
+  background: rgba(204, 0, 0, 0.2);
+  border: 1px solid rgba(204, 0, 0, 0.5);
+  color: #ef4444;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.modal-close:hover {
+  background: rgba(204, 0, 0, 0.8);
+  color: #fff;
+}
+
+/* -------------------------------------
+   Mobile Responsiveness
+   ------------------------------------- */
+@media (max-width: 1024px) {
+  .app-container {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  
+  .sidebar {
+    width: 100%;
+    padding: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    z-index: 100;
+  }
+
+  .nav-menu {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 5px;
+    padding-bottom: 10px;
+  }
+
+  .nav-item {
+    white-space: nowrap;
+    padding: 10px 15px;
+    font-size: 1rem;
+  }
+
+  .logo-container {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+  }
+  
+  .gmc-logo {
+    font-size: 2rem;
+    padding: 2px 10px;
+  }
+
+  .main-content {
+    overflow: visible;
+  }
+
+  .top-header {
+    height: auto;
+    padding: 20px;
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .page-container {
+    padding: 15px;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .split-layout, .io-form, .summary {
+    grid-template-columns: 1fr !important;
+  }
+
+  .stats-row {
+    flex-direction: column;
+  }
+
+  .io-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .form-group input, .custom-select, .btn-primary {
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  .abstract-gmc-container {
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .abstract-gmc-logo {
+    font-size: 5rem;
+  }
+
+  .abstract-headlight {
+    width: 200px;
+    height: 80px;
+  }
+
+  .abstract-left {
+    border-radius: 40px 40px 0 0;
+    border-right: 15px solid rgba(255, 255, 255, 0.05);
+    border-bottom: none;
+  }
+
+  .abstract-right {
+    border-radius: 0 0 40px 40px;
+    border-left: 15px solid rgba(255, 255, 255, 0.05);
+    border-top: none;
+  }
+
+  .welcome-title {
+    font-size: 2.5rem;
+  }
+}
