@@ -140,16 +140,131 @@ function TopHeader() {
 }
 
 function Home() {
+  const [totalSalaries, setTotalSalaries] = React.useState(0);
+  const [safeBalance, setSafeBalance] = React.useState(0);
+
+  React.useEffect(() => {
+    try {
+      // 1. Calculate Total Salaries based on attendance
+      const savedAtt = localStorage.getItem('gmb_attendance');
+      const attendance = savedAtt ? JSON.parse(savedAtt) : [];
+      const savedEmp = localStorage.getItem('gmb_employees');
+      const employees = savedEmp ? JSON.parse(savedEmp) : [];
+
+      let totalCalcSalaries = 0;
+      employees.forEach(emp => {
+        let count = 0;
+        attendance.forEach(a => {
+          if (a.name === emp.name) {
+            if (a.status === 'حاضر') count += 1;
+            else if (a.status === 'حاضر *2') count += 2;
+          }
+        });
+        const daily = Math.round(Number(emp.salary) / 30);
+        const net = (daily * count) + Number(emp.bonuses || 0) - Number(emp.deductions || 0);
+        totalCalcSalaries += net > 0 ? net : 0;
+      });
+      setTotalSalaries(totalCalcSalaries);
+
+      // 2. Calculate Safe Net Balance
+      const savedTx = localStorage.getItem('gmb_transactions');
+      const tx = savedTx ? JSON.parse(savedTx) : [];
+      let totalIn = 0;
+      let totalOut = 0;
+      tx.forEach(t => {
+        if (t.type.includes('وارد')) totalIn += Number(t.amount);
+        if (t.type.includes('خارج')) totalOut += Number(t.amount);
+      });
+      const safeAdj = Number(localStorage.getItem('gmb_safe_adjustment')) || 0;
+      setSafeBalance(totalIn - totalOut + safeAdj);
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
   return (
-    <div className="home-dashboard">
-      <div className="abstract-gmc-container">
+    <div className="home-dashboard" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div className="abstract-gmc-container" style={{ transform: 'scale(0.8)', marginBottom: '0' }}>
         <div className="abstract-headlight abstract-left"></div>
         <div className="abstract-gmc-logo">GMC</div>
         <div className="abstract-headlight abstract-right"></div>
       </div>
-      <div className="welcome-text">
+      <div className="welcome-text" style={{ marginBottom: '40px' }}>
         <h2 className="welcome-title">GM BASRA</h2>
         <p className="welcome-subtitle">النظام جاهز. اختر من القائمة للبدء.</p>
+      </div>
+
+      {/* 3D Glowing Cards */}
+      <div style={{ display: 'flex', gap: '40px', flexWrap: 'wrap', justifyContent: 'center' }}>
+        
+        {/* Safe Balance Card */}
+        <div style={{
+          background: 'linear-gradient(145deg, #111, #0a0a0a)',
+          padding: '30px 40px',
+          borderRadius: '20px',
+          border: '1px solid #10b981',
+          boxShadow: '0 10px 30px rgba(16,185,129,0.2), inset 2px 2px 10px rgba(255,255,255,0.05)',
+          transform: 'perspective(1000px) rotateX(5deg)',
+          transition: 'transform 0.3s, box-shadow 0.3s',
+          cursor: 'pointer',
+          minWidth: '280px',
+          textAlign: 'center'
+        }}
+        onMouseOver={e => {
+          e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) scale(1.05)';
+          e.currentTarget.style.boxShadow = '0 15px 40px rgba(16,185,129,0.4), inset 2px 2px 10px rgba(255,255,255,0.1)';
+        }}
+        onMouseOut={e => {
+          e.currentTarget.style.transform = 'perspective(1000px) rotateX(5deg)';
+          e.currentTarget.style.boxShadow = '0 10px 30px rgba(16,185,129,0.2), inset 2px 2px 10px rgba(255,255,255,0.05)';
+        }}>
+          <h3 style={{ color: '#10b981', margin: '0 0 15px 0', fontSize: '1.4rem' }}>🏦 صافي القاصة الكلي</h3>
+          <div style={{ 
+            fontSize: '2.5rem', 
+            fontWeight: 'bold', 
+            color: '#fff', 
+            textShadow: '0 0 15px rgba(16,185,129,0.5)',
+            direction: 'ltr'
+          }}>
+            {safeBalance.toLocaleString('en-US')}
+          </div>
+          <div style={{ color: '#666', marginTop: '10px', fontSize: '1rem' }}>دينار عراقي</div>
+        </div>
+
+        {/* Total Salaries Card */}
+        <div style={{
+          background: 'linear-gradient(145deg, #111, #0a0a0a)',
+          padding: '30px 40px',
+          borderRadius: '20px',
+          border: '1px solid #3b82f6',
+          boxShadow: '0 10px 30px rgba(59,130,246,0.2), inset 2px 2px 10px rgba(255,255,255,0.05)',
+          transform: 'perspective(1000px) rotateX(5deg)',
+          transition: 'transform 0.3s, box-shadow 0.3s',
+          cursor: 'pointer',
+          minWidth: '280px',
+          textAlign: 'center'
+        }}
+        onMouseOver={e => {
+          e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) scale(1.05)';
+          e.currentTarget.style.boxShadow = '0 15px 40px rgba(59,130,246,0.4), inset 2px 2px 10px rgba(255,255,255,0.1)';
+        }}
+        onMouseOut={e => {
+          e.currentTarget.style.transform = 'perspective(1000px) rotateX(5deg)';
+          e.currentTarget.style.boxShadow = '0 10px 30px rgba(59,130,246,0.2), inset 2px 2px 10px rgba(255,255,255,0.05)';
+        }}>
+          <h3 style={{ color: '#3b82f6', margin: '0 0 15px 0', fontSize: '1.4rem' }}>💵 استحقاقات الرواتب (حسب الحضور)</h3>
+          <div style={{ 
+            fontSize: '2.5rem', 
+            fontWeight: 'bold', 
+            color: '#fff', 
+            textShadow: '0 0 15px rgba(59,130,246,0.5)',
+            direction: 'ltr'
+          }}>
+            {totalSalaries.toLocaleString('en-US')}
+          </div>
+          <div style={{ color: '#666', marginTop: '10px', fontSize: '1rem' }}>دينار عراقي</div>
+        </div>
+
       </div>
     </div>
   );
