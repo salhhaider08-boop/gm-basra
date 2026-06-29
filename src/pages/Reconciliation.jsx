@@ -53,7 +53,8 @@ export default function Reconciliation() {
         if (t.type.includes('وارد')) totalIn += Number(t.amount);
         if (t.type.includes('خارج')) totalOut += Number(t.amount);
       });
-      setCashOnHand(totalIn - totalOut);
+      const safeAdj = Number(localStorage.getItem('gmb_safe_adjustment')) || 0;
+      setCashOnHand(totalIn - totalOut + safeAdj);
 
       // 2. Transit Goods from Purchases (gmb_purchases) -> (paidUSD + commissionUSD) * exchangeRate
       const savedPurch = localStorage.getItem('gmb_purchases');

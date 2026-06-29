@@ -46,42 +46,15 @@ export default function AccountClear() {
   const sumCardOut = gridData.reduce((acc, row) => acc + (Number(row.cardOut) || 0), 0);
   const netBalance = (sumCashIn + sumCardIn) - (sumCashOut + sumCardOut);
 
-  // 2. Safe Input
-  const [safeInput, setSafeInput] = useState('');
-  const handleAddToSafe = (e) => {
-    e.preventDefault();
-    const amount = Number(safeInput);
-    if (!amount || amount <= 0) return;
-    
-    setDialog({
-      isOpen: true,
-      type: 'confirm',
-      title: 'تأكيد الترحيل للقاصة',
-      message: `هل أنت متأكد من إيداع مبلغ ${amount.toLocaleString('en-US')} دينار في القاصة الرئيسية كـ (وارد نقد)؟`,
-      onConfirm: () => {
-        try {
-          const savedTx = localStorage.getItem('gmb_transactions');
-          const tx = savedTx && savedTx !== 'undefined' ? JSON.parse(savedTx) : [];
-          
-          const newTx = {
-            id: Date.now(),
-            date: new Date().toISOString().split('T')[0],
-            type: 'وارد نقد',
-            amount: amount
-          };
-          
-          localStorage.setItem('gmb_transactions', JSON.stringify([newTx, ...tx]));
-          
-          setSafeInput('');
-          setDialog({
-            isOpen: true, type: 'alert', title: 'نجاح', message: 'تم تحويل وإضافة المبلغ للقاصة الرئيسية بنجاح!', onConfirm: closeDialog
-          });
-        } catch(e) {
-          setDialog({ isOpen: true, type: 'alert', title: 'خطأ', message: 'حدث خطأ أثناء الإضافة.', onConfirm: closeDialog });
-        }
-      },
-      onCancel: closeDialog
-    });
+  // 2. Live Safe Adjustment
+  const [safeAdjustment, setSafeAdjustment] = useState(() => {
+    return localStorage.getItem('gmb_safe_adjustment') || '';
+  });
+
+  const handleSafeAdjustmentChange = (e) => {
+    const val = e.target.value;
+    setSafeAdjustment(val);
+    localStorage.setItem('gmb_safe_adjustment', val);
   };
 
   // 3. Calculator State
@@ -221,23 +194,18 @@ export default function AccountClear() {
           
           {/* Safe Linkage */}
           <div style={{ background: '#0a0a0a', padding: '25px', borderRadius: '15px', border: '1px solid #10b981', boxShadow: '0 0 20px rgba(16,185,129,0.1)' }}>
-            <h3 style={{ margin: '0 0 15px 0', color: '#10b981', textAlign: 'center', fontSize: '1.3rem' }}>🏦 إيداع في القاصة الرئيسية</h3>
+            <h3 style={{ margin: '0 0 15px 0', color: '#10b981', textAlign: 'center', fontSize: '1.3rem' }}>🏦 تعديل حيّ للقاصة (بدون سجل)</h3>
             <p style={{ color: '#888', fontSize: '0.9rem', textAlign: 'center', marginBottom: '20px' }}>
-              أي رقم يُضاف هنا سيزيد من النقد الموجود في الميزانية العامة تلقائياً.
+              رقم حيّ: الزيادة هنا تزيد القاصة، والنقصان ينقصها مباشرة. (هذا الرقم لا يُحفظ في سجل الحركات).
             </p>
-            <form onSubmit={handleAddToSafe} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-              <input 
-                type="number" 
-                className="custom-select" 
-                placeholder="أدخل المبلغ (دينار)" 
-                value={safeInput} 
-                onChange={e => setSafeInput(e.target.value)} 
-                style={{ fontSize: '1.3rem', padding: '15px', textAlign: 'center' }} 
-              />
-              <button type="submit" className="btn-primary" style={{ background: '#10b981', fontSize: '1.2rem', padding: '15px' }}>
-                + ترحيل للقاصة
-              </button>
-            </form>
+            <input 
+              type="number" 
+              className="custom-select" 
+              placeholder="مثال: 5000 أو -5000" 
+              value={safeAdjustment} 
+              onChange={handleSafeAdjustmentChange} 
+              style={{ fontSize: '1.3rem', padding: '15px', textAlign: 'center', width: '100%', boxSizing: 'border-box' }} 
+            />
           </div>
 
           {/* Calculator */}
