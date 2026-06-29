@@ -246,7 +246,7 @@ export default function Purchases() {
             <button className="modal-close" onClick={() => setIsLogOpen(false)}>×</button>
             <h2 style={{ textAlign: 'center', marginBottom: '30px', color: '#fff' }}>سجل المشتريات الشامل</h2>
             
-            <div className="table-section" style={{ overflowX: 'auto', maxHeight: '70vh' }}>
+            <div className="table-section" style={{ overflow: 'auto', maxHeight: '70vh' }}>
               <table className="io-table" style={{ whiteSpace: 'nowrap', fontSize: '0.9rem' }}>
                 <thead style={{ position: 'sticky', top: 0, zIndex: 10, background: '#111' }}>
                   <tr>

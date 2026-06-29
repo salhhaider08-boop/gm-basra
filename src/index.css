@@ -21,8 +21,6 @@ body {
   font-family: 'Product Sans', 'Google Sans', 'Noto Sans Arabic', sans-serif;
   background-color: var(--dark-bg);
   color: var(--text-primary);
-  height: 100vh;
-  overflow: hidden;
   direction: rtl;
   background-image: radial-gradient(#151515 1px, transparent 1px);
   background-size: 20px 20px;
