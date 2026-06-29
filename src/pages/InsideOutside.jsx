@@ -30,9 +30,10 @@ export default function InsideOutside() {
   const totalCashOut = transactions.filter(t => t.type === 'خارج نقد').reduce((acc, curr) => acc + Number(curr.amount), 0);
   const totalCardOut = transactions.filter(t => t.type === 'خارج ماستر').reduce((acc, curr) => acc + Number(curr.amount), 0);
 
+  const safeAdj = Number(localStorage.getItem('gmb_safe_adjustment')) || 0;
   const totalIn = totalCashIn + totalCardIn;
   const totalOut = totalCashOut + totalCardOut;
-  const balance = totalIn - totalOut;
+  const balance = totalIn - totalOut + safeAdj;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
