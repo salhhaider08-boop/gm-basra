@@ -29,6 +29,13 @@ function run() {
     const amountUSD = parseNumber(row[4]);
     const paidUSD = parseNumber(row[9]);
 
+    // Parse status from row 14 (واصل or anything else)
+    const statusRaw = (row[14] || '').trim();
+    const status = statusRaw.includes('واصل') ? 'واصل' : 'قيد الشحن';
+
+    const shippingCost = parseNumber(row[16]);
+    const exchange = parseNumber(row[17]) || 1390;
+
     purchasesArray.push({
       id: pId++,
       date: formattedDate,
@@ -39,9 +46,9 @@ function run() {
       discountUSD: parseNumber(row[8]),
       paidUSD: paidUSD,
       shippingType: row[15] || 'بحري',
-      shippingCostIQD: 0,
-      exchangeRate: 1390,
-      status: 'قيد الشحن'
+      shippingCostIQD: shippingCost,
+      exchangeRate: exchange,
+      status: status
     });
   }
 
@@ -49,14 +56,11 @@ function run() {
 const newPurchases = ${JSON.stringify(purchasesArray)};
 
 try {
-  let existingPurchases = JSON.parse(localStorage.getItem('gmb_purchases') || '[]');
-  if (!Array.isArray(existingPurchases)) existingPurchases = [];
-
-  const finalPurchases = [...existingPurchases, ...newPurchases];
-  localStorage.setItem('gmb_purchases', JSON.stringify(finalPurchases));
+  // نستبدل القائمة بالكامل لكي لا تتكرر المضاعفات
+  localStorage.setItem('gmb_purchases', JSON.stringify(newPurchases));
   
-  console.log("تمت إضافة " + newPurchases.length + " فاتورة مشتريات.");
-  alert("تم استيراد المشتريات بنجاح! سيتم تحديث الصفحة الآن.");
+  console.log("تم تصفير التكرار وإضافة " + newPurchases.length + " فاتورة مشتريات.");
+  alert("تم استيراد المشتريات بنجاح وإلغاء التكرار! سيتم تحديث الصفحة الآن.");
   window.location.reload();
 } catch (e) {
   console.error("حدث خطأ:", e);
@@ -64,7 +68,7 @@ try {
 }
 `;
 
-  fs.writeFileSync('C:\\Users\\asus\\Desktop\\المشتريات.txt', jsCode, 'utf-8');
+  fs.writeFileSync('C:\\Users\\asus\\Desktop\\المشتريات_المصححة.txt', jsCode, 'utf-8');
   console.log("Done");
 }
 

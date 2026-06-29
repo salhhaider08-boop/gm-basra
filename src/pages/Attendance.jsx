@@ -52,9 +52,10 @@ export default function Attendance() {
   const [dialog, setDialog] = useState({ isOpen: false, type: 'alert', title: '', message: '', onConfirm: () => {}, onCancel: () => {} });
   const closeDialog = () => setDialog(prev => ({ ...prev, isOpen: false }));
 
-  // Check if a specific date is attended by the selected employee
-  const isAttended = (dateStr) => {
-    return attendance.some(a => a.name === selectedName && a.date === dateStr);
+  // Get attendance status for a specific date
+  const getAttendanceStatus = (dateStr) => {
+    const record = attendance.find(a => a.name === selectedName && a.date === dateStr);
+    return record ? record.status : null;
   };
 
   // Toggle attendance for a specific date
@@ -70,9 +71,10 @@ export default function Attendance() {
       return;
     }
 
-    if (isAttended(dateStr)) {
-      setAttendance(attendance.filter(a => !(a.name === selectedName && a.date === dateStr)));
-    } else {
+    const currentStatus = getAttendanceStatus(dateStr);
+    
+    if (currentStatus === null) {
+      // First click: add 1 day
       const newRecord = {
         id: Date.now() + Math.random(),
         date: dateStr,
@@ -80,6 +82,14 @@ export default function Attendance() {
         status: 'حاضر'
       };
       setAttendance([...attendance, newRecord]);
+    } else if (currentStatus === 'حاضر') {
+      // Second click: change to *2
+      setAttendance(attendance.map(a => 
+        (a.name === selectedName && a.date === dateStr) ? { ...a, status: 'حاضر *2' } : a
+      ));
+    } else {
+      // Third click: remove (absent)
+      setAttendance(attendance.filter(a => !(a.name === selectedName && a.date === dateStr)));
     }
   };
 
@@ -124,13 +134,15 @@ export default function Attendance() {
       const month = a.date.substring(0, 7); // YYYY-MM
       const key = `${month}_${a.name}`;
       if (!summary[key]) summary[key] = { month, name: a.name, count: 0 };
-      summary[key].count += 1;
+      summary[key].count += (a.status === 'حاضر *2' ? 2 : 1);
     });
     return Object.values(summary).sort((a, b) => b.month.localeCompare(a.month));
   };
 
   const summaryData = getSummary();
-  const currentMonthCount = attendance.filter(a => a.name === selectedName && a.date.startsWith(selectedMonth)).length;
+  const currentMonthCount = attendance
+    .filter(a => a.name === selectedName && a.date.startsWith(selectedMonth))
+    .reduce((sum, a) => sum + (a.status === 'حاضر *2' ? 2 : 1), 0);
 
   // Current month financials for selected employee
   const currentMonthFinancials = financials.filter(f => f.name === selectedName && f.date.startsWith(selectedMonth));
@@ -199,7 +211,10 @@ export default function Attendance() {
           }}>
             {daysList.map((dateStr) => {
               const dayNum = parseInt(dateStr.split('-')[2], 10);
-              const attended = isAttended(dateStr);
+              const status = getAttendanceStatus(dateStr);
+              const isDouble = status === 'حاضر *2';
+              const attended = status !== null;
+              
               return (
                 <button
                   key={dateStr}
@@ -207,9 +222,9 @@ export default function Attendance() {
                   style={{
                     aspectRatio: '1',
                     borderRadius: '12px',
-                    border: attended ? '2px solid #10b981' : '1px solid #333',
-                    background: attended ? 'rgba(16, 185, 129, 0.15)' : '#1a1a1a',
-                    color: attended ? '#10b981' : '#888',
+                    border: attended ? (isDouble ? '2px solid #3b82f6' : '2px solid #10b981') : '1px solid #333',
+                    background: attended ? (isDouble ? 'rgba(59, 130, 246, 0.15)' : 'rgba(16, 185, 129, 0.15)') : '#1a1a1a',
+                    color: attended ? (isDouble ? '#3b82f6' : '#10b981') : '#888',
                     fontSize: '1.4rem',
                     fontWeight: 'bold',
                     cursor: 'pointer',
@@ -218,11 +233,13 @@ export default function Attendance() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     transition: 'all 0.2s ease',
-                    boxShadow: attended ? '0 0 15px rgba(16, 185, 129, 0.3) inset' : 'none'
+                    boxShadow: attended ? (isDouble ? '0 0 15px rgba(59, 130, 246, 0.3) inset' : '0 0 15px rgba(16, 185, 129, 0.3) inset') : 'none'
                   }}
                 >
                   {dayNum}
-                  {attended && <span style={{ fontSize: '0.8rem', marginTop: '5px' }}>✔️</span>}
+                  {attended && <span style={{ fontSize: '0.8rem', marginTop: '5px', fontWeight: 'bold' }}>
+                    {isDouble ? '✔️×2' : '✔️'}
+                  </span>}
                 </button>
               );
             })}
