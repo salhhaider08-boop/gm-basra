@@ -194,10 +194,7 @@ export default function AccountClear() {
           
           {/* Safe Linkage */}
           <div style={{ background: '#0a0a0a', padding: '25px', borderRadius: '15px', border: '1px solid #10b981', boxShadow: '0 0 20px rgba(16,185,129,0.1)' }}>
-            <h3 style={{ margin: '0 0 15px 0', color: '#10b981', textAlign: 'center', fontSize: '1.3rem' }}>🏦 تعديل حيّ للقاصة (بدون سجل)</h3>
-            <p style={{ color: '#888', fontSize: '0.9rem', textAlign: 'center', marginBottom: '20px' }}>
-              رقم حيّ: الزيادة هنا تزيد القاصة، والنقصان ينقصها مباشرة. (هذا الرقم لا يُحفظ في سجل الحركات).
-            </p>
+
             <input 
               type="number" 
               className="custom-select" 
