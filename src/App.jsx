@@ -145,24 +145,12 @@ function Home() {
 
   React.useEffect(() => {
     try {
-      // 1. Calculate Total Salaries based on attendance
-      const savedAtt = localStorage.getItem('gmb_attendance');
-      const attendance = savedAtt ? JSON.parse(savedAtt) : [];
-      const savedEmp = localStorage.getItem('gmb_employees');
-      const employees = savedEmp ? JSON.parse(savedEmp) : [];
-
+      // 1. Calculate Total Salaries from Salaries Ledger
+      const savedSalaries = localStorage.getItem('gmb_salaries');
+      const salaries = savedSalaries ? JSON.parse(savedSalaries) : [];
       let totalCalcSalaries = 0;
-      employees.forEach(emp => {
-        let count = 0;
-        attendance.forEach(a => {
-          if (a.name === emp.name) {
-            if (a.status === 'حاضر') count += 1;
-            else if (a.status === 'حاضر *2') count += 2;
-          }
-        });
-        const daily = Math.round(Number(emp.salary) / 30);
-        const net = (daily * count) + Number(emp.bonuses || 0) - Number(emp.deductions || 0);
-        totalCalcSalaries += net > 0 ? net : 0;
+      salaries.forEach(s => {
+        totalCalcSalaries += Number(s.netSalary) || 0;
       });
       setTotalSalaries(totalCalcSalaries);
 
@@ -252,7 +240,7 @@ function Home() {
           e.currentTarget.style.transform = 'perspective(1000px) rotateX(5deg)';
           e.currentTarget.style.boxShadow = '0 10px 30px rgba(59,130,246,0.2), inset 2px 2px 10px rgba(255,255,255,0.05)';
         }}>
-          <h3 style={{ color: '#3b82f6', margin: '0 0 15px 0', fontSize: '1.4rem' }}>💵 استحقاقات الرواتب (حسب الحضور)</h3>
+          <h3 style={{ color: '#3b82f6', margin: '0 0 15px 0', fontSize: '1.4rem' }}>💵 إجمالي الرواتب المصروفة</h3>
           <div style={{ 
             fontSize: '2.5rem', 
             fontWeight: 'bold', 
