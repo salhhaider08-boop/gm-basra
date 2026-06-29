@@ -252,7 +252,7 @@ export default function AccountClear() {
               {calcInput}
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', direction: 'ltr' }}>
               {calcBtns.map(btn => (
                 <button 
                   key={btn}
