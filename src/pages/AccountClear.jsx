@@ -167,7 +167,7 @@ export default function AccountClear() {
             <strong style={{ 
               fontSize: '3.5rem', 
               color: netBalance >= 0 ? '#10b981' : '#ef4444', 
-              textShadow: \`0 0 20px \${netBalance >= 0 ? 'rgba(16,185,129,0.5)' : 'rgba(239,68,68,0.5)'}\`,
+              textShadow: netBalance >= 0 ? '0 0 20px rgba(16,185,129,0.5)' : '0 0 20px rgba(239,68,68,0.5)',
               display: 'block',
               direction: 'ltr'
             }}>
