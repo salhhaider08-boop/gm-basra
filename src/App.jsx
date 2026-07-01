@@ -214,7 +214,7 @@ function Home() {
             textShadow: '0 0 15px rgba(16,185,129,0.5)',
             direction: 'ltr'
           }}>
-            {safeBalance.toLocaleString('en-US')}
+            {Math.round(safeBalance).toLocaleString('en-US')}
           </div>
           <div style={{ color: '#666', marginTop: '10px', fontSize: '1rem' }}>دينار عراقي</div>
         </div>
@@ -248,7 +248,7 @@ function Home() {
             textShadow: '0 0 15px rgba(59,130,246,0.5)',
             direction: 'ltr'
           }}>
-            {totalSalaries.toLocaleString('en-US')}
+            {Math.round(totalSalaries).toLocaleString('en-US')}
           </div>
           <div style={{ color: '#666', marginTop: '10px', fontSize: '1rem' }}>دينار عراقي</div>
         </div>
