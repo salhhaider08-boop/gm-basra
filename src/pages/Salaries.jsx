@@ -131,29 +131,45 @@ export default function Salaries() {
             .receipt { 
               max-width: 450px; 
               margin: 0 auto; 
-              border: 2px solid #3b82f6; 
+              border: 2px solid #800000; /* Maroon border */
               padding: 30px; 
               border-radius: 15px; 
               position: relative;
-              background-color: #f8fafc;
+              background-color: #fcf8f8;
               z-index: 1;
-              box-shadow: 0 10px 25px rgba(59,130,246,0.1);
+              box-shadow: 0 10px 25px rgba(128,0,0,0.1);
             }
             .receipt::before {
               content: "";
               position: absolute;
               top: 0; left: 0; width: 100%; height: 100%;
-              background-image: url('/malibu-watermark.jpg');
+              background-image: url('/malibu-watermark-maroon.jpg');
               background-size: contain;
               background-repeat: no-repeat;
               background-position: center;
-              opacity: 0.15;
+              opacity: 0.22; /* Slightly darker but still a watermark */
               z-index: -1;
             }
-            .header { text-align: center; border-bottom: 2px dashed #3b82f6; padding-bottom: 15px; margin-bottom: 25px; }
-            .header h1 { margin: 0; font-size: 3.5rem; letter-spacing: 5px; color: #1d4ed8; font-weight: 900; }
-            .header p { margin: 5px 0 0 0; font-size: 1.3rem; font-weight: bold; color: #3b82f6; }
-            .info-box { background: rgba(59,130,246,0.1); padding: 10px; border-radius: 8px; margin-top: 15px; font-size: 0.95rem; }
+            .header { text-align: center; border-bottom: 2px dashed #800000; padding-bottom: 15px; margin-bottom: 25px; }
+            .header-logo-container {
+              display: inline-block;
+              background: linear-gradient(135deg, #1e293b, #000000);
+              padding: 5px 35px;
+              border-radius: 8px;
+              border: 2px solid #fbbf24;
+              box-shadow: 0 5px 15px rgba(0,0,0,0.2), inset 0 0 10px rgba(251, 191, 36, 0.2);
+              margin-bottom: 10px;
+            }
+            .header h1 { 
+              margin: 0; 
+              font-size: 3.5rem; 
+              letter-spacing: 8px; 
+              color: #fbbf24; 
+              font-weight: 900; 
+              text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            }
+            .header p { margin: 5px 0 0 0; font-size: 1.3rem; font-weight: bold; color: #800000; }
+            .info-box { background: rgba(128,0,0,0.05); padding: 10px; border-radius: 8px; margin-top: 15px; font-size: 0.95rem; border: 1px solid rgba(128,0,0,0.2); }
             .row { display: flex; justify-content: space-between; margin-bottom: 18px; font-size: 1.1rem; border-bottom: 1px dashed #cbd5e1; padding-bottom: 8px; }
             .row span:first-child { color: #475569; font-weight: bold; }
             .row span:last-child { color: #0f172a; font-weight: bold; }
@@ -169,17 +185,19 @@ export default function Salaries() {
               color: #047857;
             }
             .row.total span:last-child { color: #047857; font-size: 1.6rem; }
-            .footer { text-align: center; margin-top: 40px; font-size: 1rem; color: #333; border-top: 2px dashed #3b82f6; padding-top: 20px; }
+            .footer { text-align: center; margin-top: 40px; font-size: 1rem; color: #333; border-top: 2px dashed #800000; padding-top: 20px; }
             @media print {
               body { margin: 0; padding: 0; }
-              .receipt { border: 2px solid #3b82f6; box-shadow: none; max-width: 100%; margin: 0; }
+              .receipt { border: 2px solid #800000; box-shadow: none; max-width: 100%; margin: 0; }
             }
           </style>
         </head>
         <body>
           <div class="receipt">
             <div class="header">
-              <h1>GM</h1>
+              <div class="header-logo-container">
+                <h1>GM</h1>
+              </div>
               <p>وصل استلام راتب</p>
               <div class="info-box">
                 <div><strong>تاريخ الإصدار:</strong> ${new Date().toLocaleDateString('en-GB')}</div>
@@ -189,7 +207,7 @@ export default function Salaries() {
             
             <div class="row">
               <span>اسم الموظف:</span>
-              <strong style="color: #2563eb; font-size: 1.2rem;">${s.name}</strong>
+              <strong style="color: #800000; font-size: 1.2rem;">${s.name}</strong>
             </div>
             <div class="row">
               <span>الراتب الكلي (الأساسي):</span>
