@@ -110,6 +110,81 @@ export default function Salaries() {
 
   const { dailyWage, dueSalary, netSalary, carryOverDebt } = calcSalaryDetails();
 
+  const handlePrint = (s) => {
+    const printWindow = window.open('', '_blank', 'width=600,height=800');
+    if (!printWindow) return;
+    
+    const html = `
+      <html dir="rtl" lang="ar">
+        <head>
+          <title>وصل راتب - ${s.name}</title>
+          <style>
+            body { font-family: 'Arial', sans-serif; background: #fff; color: #000; padding: 20px; }
+            .receipt { max-width: 400px; margin: 0 auto; border: 2px solid #000; padding: 20px; border-radius: 10px; }
+            .header { text-align: center; border-bottom: 2px dashed #000; padding-bottom: 10px; margin-bottom: 20px; }
+            .header h1 { margin: 0; font-size: 3rem; letter-spacing: 5px; }
+            .header p { margin: 5px 0 0 0; font-size: 1.2rem; font-weight: bold; }
+            .row { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px dashed #ccc; padding-bottom: 5px; }
+            .row.total { font-weight: bold; font-size: 1.4rem; border-top: 2px solid #000; border-bottom: none; padding-top: 15px; margin-top: 20px; }
+            .footer { text-align: center; margin-top: 40px; font-size: 1rem; color: #333; border-top: 2px dashed #000; padding-top: 20px; }
+            @media print {
+              body { margin: 0; padding: 0; }
+              .receipt { border: none; max-width: 100%; margin: 0; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="receipt">
+            <div class="header">
+              <h1>GM</h1>
+              <p>وصل استلام راتب</p>
+              <div style="margin-top: 10px; font-size: 0.9rem;">تاريخ الإصدار: ${new Date().toLocaleDateString('en-GB')}</div>
+              <div style="font-size: 0.9rem;">عن شهر: ${s.month}</div>
+            </div>
+            
+            <div class="row">
+              <span>اسم الموظف:</span>
+              <strong>${s.name}</strong>
+            </div>
+            <div class="row">
+              <span>الراتب الكلي (الأساسي):</span>
+              <span>${s.baseSalary.toLocaleString('en-US')} دينار</span>
+            </div>
+            <div class="row">
+              <span>عدد أيام الحضور (مع الإضافي):</span>
+              <span>${s.daysWorked} يوم</span>
+            </div>
+            <div class="row">
+              <span>المكافآت:</span>
+              <span>${s.bonuses.toLocaleString('en-US')} دينار</span>
+            </div>
+            <div class="row">
+              <span>الاستقطاعات (سلف + ديون):</span>
+              <span>${(s.advances + s.debts).toLocaleString('en-US')} دينار</span>
+            </div>
+            
+            <div class="row total">
+              <span>الراتب الصافي الممنوح:</span>
+              <span>${Math.round(s.netSalary).toLocaleString('en-US')} دينار</span>
+            </div>
+            
+            <div class="footer">
+              توقيع المستلم: ___________________
+              <br><br><br>
+              <strong>GM Basra System</strong>
+            </div>
+          </div>
+          <script>
+            window.onload = function() { window.print(); window.close(); }
+          </script>
+        </body>
+      </html>
+    `;
+    
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -364,8 +439,9 @@ export default function Salaries() {
                       <td style={{ color: '#ef4444' }}>{s.advances.toLocaleString('en-US')}</td>
                       <td style={{ color: '#ef4444' }}>{s.debts.toLocaleString('en-US')}</td>
                       <td style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#10b981' }}>{Math.round(s.netSalary).toLocaleString('en-US')}</td>
-                      <td>
-                        <button onClick={() => handleDelete(s.id)} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '1.2rem' }}>🗑️</button>
+                      <td style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                        <button onClick={() => handlePrint(s)} title="طباعة وصل الراتب" style={{ background: '#3b82f6', border: 'none', color: '#fff', cursor: 'pointer', fontSize: '1rem', padding: '5px 10px', borderRadius: '5px' }}>🖨️ طباعة</button>
+                        <button onClick={() => handleDelete(s.id)} title="حذف القيد" style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '1.2rem' }}>🗑️</button>
                       </td>
                     </tr>
                   ))}
