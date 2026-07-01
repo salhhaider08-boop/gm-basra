@@ -119,17 +119,60 @@ export default function Salaries() {
         <head>
           <title>وصل راتب - ${s.name}</title>
           <style>
-            body { font-family: 'Arial', sans-serif; background: #fff; color: #000; padding: 20px; }
-            .receipt { max-width: 400px; margin: 0 auto; border: 2px solid #000; padding: 20px; border-radius: 10px; }
-            .header { text-align: center; border-bottom: 2px dashed #000; padding-bottom: 10px; margin-bottom: 20px; }
-            .header h1 { margin: 0; font-size: 3rem; letter-spacing: 5px; }
-            .header p { margin: 5px 0 0 0; font-size: 1.2rem; font-weight: bold; }
-            .row { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px dashed #ccc; padding-bottom: 5px; }
-            .row.total { font-weight: bold; font-size: 1.4rem; border-top: 2px solid #000; border-bottom: none; padding-top: 15px; margin-top: 20px; }
-            .footer { text-align: center; margin-top: 40px; font-size: 1rem; color: #333; border-top: 2px dashed #000; padding-top: 20px; }
+            @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+            body { 
+              font-family: 'Tajawal', Arial, sans-serif; 
+              background: #fff; 
+              color: #1e293b; 
+              padding: 20px; 
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+            }
+            .receipt { 
+              max-width: 450px; 
+              margin: 0 auto; 
+              border: 2px solid #3b82f6; 
+              padding: 30px; 
+              border-radius: 15px; 
+              position: relative;
+              background-color: #f8fafc;
+              z-index: 1;
+              box-shadow: 0 10px 25px rgba(59,130,246,0.1);
+            }
+            .receipt::before {
+              content: "";
+              position: absolute;
+              top: 0; left: 0; width: 100%; height: 100%;
+              background-image: url('/malibu-watermark.jpg');
+              background-size: contain;
+              background-repeat: no-repeat;
+              background-position: center;
+              opacity: 0.15;
+              z-index: -1;
+            }
+            .header { text-align: center; border-bottom: 2px dashed #3b82f6; padding-bottom: 15px; margin-bottom: 25px; }
+            .header h1 { margin: 0; font-size: 3.5rem; letter-spacing: 5px; color: #1d4ed8; font-weight: 900; }
+            .header p { margin: 5px 0 0 0; font-size: 1.3rem; font-weight: bold; color: #3b82f6; }
+            .info-box { background: rgba(59,130,246,0.1); padding: 10px; border-radius: 8px; margin-top: 15px; font-size: 0.95rem; }
+            .row { display: flex; justify-content: space-between; margin-bottom: 18px; font-size: 1.1rem; border-bottom: 1px dashed #cbd5e1; padding-bottom: 8px; }
+            .row span:first-child { color: #475569; font-weight: bold; }
+            .row span:last-child { color: #0f172a; font-weight: bold; }
+            .row.total { 
+              font-weight: bold; 
+              font-size: 1.5rem; 
+              border-top: 2px solid #10b981; 
+              border-bottom: none; 
+              padding: 15px; 
+              margin-top: 25px; 
+              background: rgba(16,185,129,0.15);
+              border-radius: 10px;
+              color: #047857;
+            }
+            .row.total span:last-child { color: #047857; font-size: 1.6rem; }
+            .footer { text-align: center; margin-top: 40px; font-size: 1rem; color: #333; border-top: 2px dashed #3b82f6; padding-top: 20px; }
             @media print {
               body { margin: 0; padding: 0; }
-              .receipt { border: none; max-width: 100%; margin: 0; }
+              .receipt { border: 2px solid #3b82f6; box-shadow: none; max-width: 100%; margin: 0; }
             }
           </style>
         </head>
@@ -138,44 +181,54 @@ export default function Salaries() {
             <div class="header">
               <h1>GM</h1>
               <p>وصل استلام راتب</p>
-              <div style="margin-top: 10px; font-size: 0.9rem;">تاريخ الإصدار: ${new Date().toLocaleDateString('en-GB')}</div>
-              <div style="font-size: 0.9rem;">عن شهر: ${s.month}</div>
+              <div class="info-box">
+                <div><strong>تاريخ الإصدار:</strong> ${new Date().toLocaleDateString('en-GB')}</div>
+                <div><strong>عن شهر:</strong> ${s.month}</div>
+              </div>
             </div>
             
             <div class="row">
               <span>اسم الموظف:</span>
-              <strong>${s.name}</strong>
+              <strong style="color: #2563eb; font-size: 1.2rem;">${s.name}</strong>
             </div>
             <div class="row">
               <span>الراتب الكلي (الأساسي):</span>
               <span>${s.baseSalary.toLocaleString('en-US')} دينار</span>
             </div>
             <div class="row">
+              <span>سعر اليوم الواحد:</span>
+              <span style="color: #10b981;">${Math.round(s.dailyWage).toLocaleString('en-US')} دينار</span>
+            </div>
+            <div class="row">
               <span>عدد أيام الحضور (مع الإضافي):</span>
               <span>${s.daysWorked} يوم</span>
             </div>
             <div class="row">
-              <span>المكافآت:</span>
-              <span>${s.bonuses.toLocaleString('en-US')} دينار</span>
+              <span>المكافآت (الإضافي النقدي):</span>
+              <span style="color: #10b981;">${s.bonuses.toLocaleString('en-US')} دينار</span>
             </div>
             <div class="row">
               <span>الاستقطاعات (سلف + ديون):</span>
-              <span>${(s.advances + s.debts).toLocaleString('en-US')} دينار</span>
+              <span style="color: #ef4444;">${(s.advances + s.debts).toLocaleString('en-US')} دينار</span>
             </div>
             
             <div class="row total">
-              <span>الراتب الصافي الممنوح:</span>
-              <span>${Math.round(s.netSalary).toLocaleString('en-US')} دينار</span>
+              <span>الصافي الممنوح:</span>
+              <span>${Math.round(s.netSalary).toLocaleString('en-US')} د.ع</span>
             </div>
             
             <div class="footer">
-              توقيع المستلم: ___________________
-              <br><br><br>
-              <strong>GM Basra System</strong>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 30px; font-weight: bold;">
+                <div>توقيع المستلم:</div>
+                <div>توقيع الإدارة:</div>
+              </div>
+              <div style="color: #64748b; font-size: 0.85rem;">تم إصدار هذا الوصل من نظام GM Basra System</div>
             </div>
           </div>
           <script>
-            window.onload = function() { window.print(); window.close(); }
+            window.onload = function() { 
+              setTimeout(() => { window.print(); window.close(); }, 500); 
+            }
           </script>
         </body>
       </html>
