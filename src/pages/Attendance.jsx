@@ -71,6 +71,7 @@ export default function Attendance() {
       return;
     }
 
+    const currentStatus = getAttendanceStatus(dateStr);
     if (currentStatus === null || currentStatus === undefined) {
       // First click: add 1 day
       const newRecord = {
