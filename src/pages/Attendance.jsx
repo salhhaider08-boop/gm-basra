@@ -71,9 +71,7 @@ export default function Attendance() {
       return;
     }
 
-    const currentStatus = getAttendanceStatus(dateStr);
-    
-    if (currentStatus === null) {
+    if (currentStatus === null || currentStatus === undefined) {
       // First click: add 1 day
       const newRecord = {
         id: Date.now() + Math.random(),
@@ -87,8 +85,13 @@ export default function Attendance() {
       setAttendance(attendance.map(a => 
         (a.name === selectedName && a.date === dateStr) ? { ...a, status: 'حاضر *2' } : a
       ));
+    } else if (currentStatus === 'حاضر *2') {
+      // Third click: change to absent (غياب)
+      setAttendance(attendance.map(a => 
+        (a.name === selectedName && a.date === dateStr) ? { ...a, status: 'غياب' } : a
+      ));
     } else {
-      // Third click: remove (absent)
+      // Fourth click: remove (empty)
       setAttendance(attendance.filter(a => !(a.name === selectedName && a.date === dateStr)));
     }
   };
@@ -213,8 +216,30 @@ export default function Attendance() {
               const dayNum = parseInt(dateStr.split('-')[2], 10);
               const status = getAttendanceStatus(dateStr);
               const isDouble = status === 'حاضر *2';
-              const attended = status !== null;
+              const isAbsent = status === 'غياب';
+              const attended = status === 'حاضر' || status === 'حاضر *2';
+              const hasStatus = status !== null;
               
+              let borderColor = '#333';
+              let bgColor = '#1a1a1a';
+              let txtColor = '#888';
+              let shadow = 'none';
+              let icon = '';
+
+              if (attended) {
+                borderColor = isDouble ? '2px solid #3b82f6' : '2px solid #10b981';
+                bgColor = isDouble ? 'rgba(59, 130, 246, 0.15)' : 'rgba(16, 185, 129, 0.15)';
+                txtColor = isDouble ? '#3b82f6' : '#10b981';
+                shadow = isDouble ? '0 0 15px rgba(59, 130, 246, 0.3) inset' : '0 0 15px rgba(16, 185, 129, 0.3) inset';
+                icon = isDouble ? '✔️×2' : '✔️';
+              } else if (isAbsent) {
+                borderColor = '2px solid #ef4444';
+                bgColor = 'rgba(239, 68, 68, 0.15)';
+                txtColor = '#ef4444';
+                shadow = '0 0 15px rgba(239, 68, 68, 0.3) inset';
+                icon = '❌';
+              }
+
               return (
                 <button
                   key={dateStr}
@@ -222,9 +247,9 @@ export default function Attendance() {
                   style={{
                     aspectRatio: '1',
                     borderRadius: '12px',
-                    border: attended ? (isDouble ? '2px solid #3b82f6' : '2px solid #10b981') : '1px solid #333',
-                    background: attended ? (isDouble ? 'rgba(59, 130, 246, 0.15)' : 'rgba(16, 185, 129, 0.15)') : '#1a1a1a',
-                    color: attended ? (isDouble ? '#3b82f6' : '#10b981') : '#888',
+                    border: borderColor,
+                    background: bgColor,
+                    color: txtColor,
                     fontSize: '1.4rem',
                     fontWeight: 'bold',
                     cursor: 'pointer',
@@ -233,12 +258,12 @@ export default function Attendance() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     transition: 'all 0.2s ease',
-                    boxShadow: attended ? (isDouble ? '0 0 15px rgba(59, 130, 246, 0.3) inset' : '0 0 15px rgba(16, 185, 129, 0.3) inset') : 'none'
+                    boxShadow: shadow
                   }}
                 >
                   {dayNum}
-                  {attended && <span style={{ fontSize: '0.8rem', marginTop: '5px', fontWeight: 'bold' }}>
-                    {isDouble ? '✔️×2' : '✔️'}
+                  {hasStatus && <span style={{ fontSize: '0.8rem', marginTop: '5px', fontWeight: 'bold' }}>
+                    {icon}
                   </span>}
                 </button>
               );

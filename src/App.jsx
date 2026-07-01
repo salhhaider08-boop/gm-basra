@@ -74,7 +74,8 @@ function TopHeader() {
   React.useEffect(() => {
     // Check attendance for today
     try {
-      const today = new Date().toISOString().split('T')[0];
+      const todayDate = new Date();
+      const today = `${todayDate.getFullYear()}-${String(todayDate.getMonth() + 1).padStart(2, '0')}-${String(todayDate.getDate()).padStart(2, '0')}`;
       const savedAtt = localStorage.getItem('gmb_attendance');
       const attendance = savedAtt ? JSON.parse(savedAtt) : [];
       const savedEmp = localStorage.getItem('gmb_employees');
