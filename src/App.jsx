@@ -163,7 +163,7 @@ function Home() {
         // Attendance days
         const count = attendance
           .filter(a => a.name === emp.name && a.date.startsWith(currentMonthStr))
-          .reduce((sum, a) => sum + (a.status === 'حاضر *2' ? 2 : 1), 0);
+          .reduce((sum, a) => sum + (a.status === 'حاضر *2' ? 2 : (a.status === 'حاضر' ? 1 : 0)), 0);
           
         // Financials
         const userFins = financials.filter(f => f.name === emp.name && f.date.startsWith(currentMonthStr));

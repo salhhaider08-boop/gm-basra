@@ -60,7 +60,7 @@ export default function Salaries() {
       const attendance = JSON.parse(savedAttendance);
       count = attendance
         .filter(a => a.name === formData.name && a.date.startsWith(currentMonthStr))
-        .reduce((sum, a) => sum + (a.status === 'حاضر *2' ? 2 : 1), 0);
+        .reduce((sum, a) => sum + (a.status === 'حاضر *2' ? 2 : (a.status === 'حاضر' ? 1 : 0)), 0);
     }
 
     // 2. Fetch Financials (Advances, Debts, Bonuses)

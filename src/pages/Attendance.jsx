@@ -138,7 +138,7 @@ export default function Attendance() {
       const month = a.date.substring(0, 7); // YYYY-MM
       const key = `${month}_${a.name}`;
       if (!summary[key]) summary[key] = { month, name: a.name, count: 0 };
-      summary[key].count += (a.status === 'حاضر *2' ? 2 : 1);
+      summary[key].count += (a.status === 'حاضر *2' ? 2 : (a.status === 'حاضر' ? 1 : 0));
     });
     return Object.values(summary).sort((a, b) => b.month.localeCompare(a.month));
   };
@@ -146,7 +146,7 @@ export default function Attendance() {
   const summaryData = getSummary();
   const currentMonthCount = attendance
     .filter(a => a.name === selectedName && a.date.startsWith(selectedMonth))
-    .reduce((sum, a) => sum + (a.status === 'حاضر *2' ? 2 : 1), 0);
+    .reduce((sum, a) => sum + (a.status === 'حاضر *2' ? 2 : (a.status === 'حاضر' ? 1 : 0)), 0);
 
   // Current month financials for selected employee
   const currentMonthFinancials = financials.filter(f => f.name === selectedName && f.date.startsWith(selectedMonth));
