@@ -250,37 +250,33 @@ function Home() {
           <div style={{ color: '#666', marginTop: '10px', fontSize: '1rem' }}>دينار عراقي</div>
         </div>
 
-        {/* Live Salaries List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', width: '100%', maxWidth: '350px' }}>
-          <div style={{ background: 'linear-gradient(145deg, #1e3a8a, #172554)', padding: '15px', borderRadius: '15px', border: '1px solid #3b82f6', textAlign: 'center', marginBottom: '5px' }}>
-            <h3 style={{ color: '#60a5fa', margin: '0 0 5px 0', fontSize: '1.2rem' }}>💵 رواتب الموظفين الحية</h3>
-            <div style={{ color: '#93c5fd', fontSize: '0.85rem' }}>للشهر الحالي بناءً على الحضور المباشر</div>
-          </div>
-          
+        {/* Live Salaries Tiles */}
+        <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '20px' }}>
           {liveSalaries.map((emp, idx) => (
             <div key={idx} style={{
               background: 'linear-gradient(145deg, #111, #0a0a0a)',
-              padding: '15px 20px',
-              borderRadius: '15px',
+              padding: '20px 30px',
+              borderRadius: '20px',
               border: '1px solid #333',
               display: 'flex',
-              justifyContent: 'space-between',
+              flexDirection: 'column',
               alignItems: 'center',
               boxShadow: '0 5px 15px rgba(0,0,0,0.5)',
               transition: 'transform 0.2s',
-              cursor: 'default'
+              cursor: 'default',
+              minWidth: '150px'
             }}
-            onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'}
+            onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'}
             onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>
-              <div style={{ color: '#fff', fontWeight: 'bold', fontSize: '1.2rem' }}>{emp.name}</div>
-              <div style={{ color: '#10b981', fontWeight: 'bold', fontSize: '1.3rem', direction: 'ltr', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <div style={{ color: '#fff', fontWeight: 'bold', fontSize: '1.3rem', marginBottom: '15px' }}>{emp.name}</div>
+              <div style={{ color: '#10b981', fontWeight: 'bold', fontSize: '1.5rem', direction: 'ltr', display: 'flex', alignItems: 'center', gap: '5px', background: '#1a1a1a', padding: '10px 20px', borderRadius: '10px', border: '1px dashed #444' }}>
                 {emp.netSalary.toLocaleString('en-US')} 
-                <span style={{fontSize: '0.8rem', color: '#888'}}>د.ع</span>
+                <span style={{fontSize: '0.9rem', color: '#888'}}>د.ع</span>
               </div>
             </div>
           ))}
           {liveSalaries.length === 0 && (
-            <div style={{ textAlign: 'center', color: '#666', padding: '20px', border: '1px dashed #333', borderRadius: '10px' }}>لا يوجد موظفين مسجلين حالياً</div>
+            <div style={{ textAlign: 'center', color: '#666', padding: '20px', border: '1px dashed #333', borderRadius: '10px', width: '100%' }}>لا يوجد موظفين مسجلين حالياً</div>
           )}
         </div>
 
